@@ -1,7 +1,7 @@
 <label class="ti-left-label"><span><?php echo TrustindexPlugin::___("%s Business URL", [ "Booking.com" ]); ?>:</span></label>
 <div class="input">
 <input class="form-control"
-placeholder="<?php echo TrustindexPlugin::___("e.g.:") . ' ' . $example_url; ?>"
+placeholder="<?php echo TrustindexPlugin::___("e.g.:") . ' ' . esc_attr($example_url); ?>"
 id="page-link"
 type="text" required="required"
 />

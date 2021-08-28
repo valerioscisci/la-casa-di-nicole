@@ -1,7 +1,7 @@
 === Widgets for Booking.com Reviews ===
 Contributors: trustindex
 Donate link: https://www.trustindex.io/prices/
-Tags: booking.com, reviews, widget, slider, booking reviews
+Tags: booking.com, reviews, widget, slider, booking reviews, ratings, recommendations, testimonials, hotels, accommodation, review, rating, recommendation, testimonial, customer review
 Requires at least: 3.0.1
 Tested up to: 5.8
 Requires PHP: 5.2
@@ -14,7 +14,7 @@ Plugin URI: https://wordpress.org/plugins/review-widgets-for-booking-com/
 Author: Trustindex.io <support@trustindex.io>
 Author URI: https://www.trustindex.io/
 Text Domain: review-widgets-for-booking-com
-Version: 6.6.2
+Version: 6.9
 
 Embed Booking.com reviews fast and easily into your WordPress site. Increase SEO, trust and sales using Booking.com reviews.
 
@@ -81,15 +81,16 @@ Why not display your other ratings, too? Check out our other free review plugins
 * <a href="https://wordpress.org/plugins/widgets-for-aliexpress-reviews/" target="_blank">Aliexpress</a>
 * <a href="https://wordpress.org/plugins/widgets-for-alibaba-reviews/" target="_blank">Alibaba</a>
 * <a href="https://wordpress.org/plugins/review-widgets-for-amazon/" target="_blank">Amazon</a>
-* <a href="https://wordpress.org/plugins/review-widgets-for-bookatable/" target="_blank">Bookatable</a>
 * <a href="https://wordpress.org/plugins/review-widgets-for-booking-com/" target="_blank">Booking.com</a>
 * <a href="https://wordpress.org/plugins/review-widgets-for-capterra/" target="_blank">Capterra</a>
+* <a href="https://wordpress.org/plugins/widgets-for-ebay-reviews/" target="_blank">Ebay</a>
 * <a href="https://wordpress.org/plugins/review-widgets-for-expedia/" target="_blank">Expedia</a>
 * <a href="https://wordpress.org/plugins/free-facebook-reviews-and-recommendations-widgets/" target="_blank">Facebook</a>
 * <a href="https://wordpress.org/plugins/review-widgets-for-foursquare/" target="_blank">Foursquare</a>
 * <a href="https://wordpress.org/plugins/wp-reviews-plugin-for-google/" target="_blank">Google</a>
 * <a href="https://wordpress.org/plugins/review-widgets-for-hotels-com/" target="_blank">Hotels.com</a>
 * <a href="https://wordpress.org/plugins/reviews-widgets-for-opentable/" target="_blank">Opentable</a>
+* <a href="https://wordpress.org/plugins/widgets-for-sourceforge-reviews/" target="_blank">SourceForge</a>
 * <a href="https://wordpress.org/plugins/widgets-for-thumbtack-reviews/" target="_blank">Thumbtack</a>
 * <a href="https://wordpress.org/plugins/review-widgets-for-tripadvisor/" target="_blank">Tripadvisor</a>
 * <a href="https://wordpress.org/plugins/reviews-widgets-for-yelp/" target="_blank">Yelp</a>
@@ -101,7 +102,7 @@ Why not display your other ratings, too? Check out our other free review plugins
 If your company does business globally, it’s in your interest to cater to various languages.
 
 Our Widgets for Booking.com Reviews supports the following languages:
-Arabic, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Korean, Lithuanian, Norwegian, Polish, Portuguese, Romanian, Russian, Scottish Gaelic, Serbian, Slovak, Slovenian, Spanish, Swedish, Thai, Turkish, Vietnamese
+Arabic, Bulgarian, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Korean, Lithuanian, Macedonian, Malay, Norwegian, Polish, Portuguese, Romanian, Russian, Scottish Gaelic, Serbian, Slovak, Slovenian, Spanish, Swedish, Thai, Turkish, Ukranian, Vietnamese
 
 == Support ==
 

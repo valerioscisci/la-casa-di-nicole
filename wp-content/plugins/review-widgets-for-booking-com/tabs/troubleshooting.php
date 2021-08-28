@@ -19,7 +19,7 @@ exit;
 }
 $yes_icon = '<span class="dashicons dashicons-yes-alt"></span>';
 $no_icon = '<span class="dashicons dashicons-dismiss"></span>';
-$plugin_updated = ($trustindex_pm_booking->get_plugin_current_version() <= "6.6.2");
+$plugin_updated = ($trustindex_pm_booking->get_plugin_current_version() <= "6.9");
 ?>
 <div class="ti-box">
 <div class="ti-header"><?php echo TrustindexPlugin::___("Troubleshooting"); ?></div>
@@ -57,7 +57,24 @@ $plugin_updated = ($trustindex_pm_booking->get_plugin_current_version() <= "6.6.
 </li>
 </ul>
 </li>
-<li><?php echo TrustindexPlugin::___('If the problem/question still exists, please send an email to support@trustindex.io included the information below and our colleagues will answer you in 48 hours!'); ?></li>
+<li>
+<?php
+$plugin_url = 'https://wordpress.org/support/plugin/' . $trustindex_pm_booking->get_plugin_slug();
+$screenshot_url = 'https://snipboard.io';
+$screencast_url = 'https://streamable.com/upload-video';
+$pastebin_url = 'https://pastebin.com';
+echo TrustindexPlugin::___("If the problem/question still exists, please create an issue here: %s", [ '<a href="'. $plugin_url .'" target="_blank">'. $plugin_url .'</a>' ]);
+?>
+<br />
+<?php echo TrustindexPlugin::___('Please help us with some information:'); ?>
+<ul>
+<li><?php echo TrustindexPlugin::___('Describe your problem'); ?></li>
+<li><?php echo TrustindexPlugin::___('You can share a screenshot with %s', [ '<a href="'. $screenshot_url .'" target="_blank">'. $screenshot_url .'</a>' ]); ?></li>
+<li><?php echo TrustindexPlugin::___('You can share a screencast video with %s', [ '<a href="'. $screencast_url .'" target="_blank">'. $screencast_url .'</a>' ]); ?></li>
+<li><?php echo TrustindexPlugin::___('If you have an (webserver) error log, you can copy it to the issue, or link it with %s', [ '<a href="'. $pastebin_url .'" target="_blank">'. $pastebin_url .'</a>' ]); ?></li>
+<li><?php echo TrustindexPlugin::___('And include the information below:'); ?></li>
+</ul>
+</li>
 </ul>
 <?php
 $dir = __DIR__ . '/../review-widgets-for-booking-com.php';
@@ -111,23 +128,27 @@ if($opt_name == "css-content")
 continue;
 }
 $option = get_option($trustindex_pm_booking->get_option_name( $opt_name ));
-echo "\n\t$opt_name: ";
+echo "\n\t". esc_html($opt_name) .": ";
 if($opt_name == "page-details" || is_array($option))
 {
 if(isset($option['reviews']))
 {
 unset($option['reviews']);
 }
-echo str_replace("\n", "\n\t\t", print_r($option, true));
+echo esc_html(str_replace("\n", "\n\t\t", print_r($option, true)));
+}
+else if($opt_name == 'download-timestamp')
+{
+echo date('Y-m-d H:i:s', esc_html($option));
 }
 else
 {
-echo $option;
+echo esc_html($option);
 }
 }
 echo "\n\n"; ?>
-Reviews: <?php echo str_replace("\n", "\n\t", print_r($reviews, true)) ."\n\n\t"; ?>
-CSS: <?php echo get_option($trustindex_pm_booking->get_option_name('css-content')) ."\n\n"; ?>
+Reviews: <?php echo esc_html(str_replace("\n", "\n\t", print_r($reviews, true))) ."\n\n\t"; ?>
+CSS: <?php echo esc_html(get_option($trustindex_pm_booking->get_option_name('css-content'))) ."\n\n"; ?>
 Active Theme: <?php
 if (!function_exists('wp_get_theme'))
 {
@@ -150,13 +171,13 @@ echo "\n\t". esc_html($plugin['Name'].' ('.$plugin['Version'] . (is_plugin_activ
 <div class="ti-box">
 <div class="ti-header"><?php echo TrustindexPlugin::___("Re-create plugin"); ?></div>
 <p><?php echo TrustindexPlugin::___('Re-create the database tables of the plugin.<br />Please note: this removes all settings and reviews.'); ?></p>
-<a href="?page=<?php echo sanitize_text_field($_GET['page']); ?>&tab=setup_no_reg&recreate" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>" style="margin-left: 0"><?php echo TrustindexPlugin::___("Re-create plugin"); ?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&recreate" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>" style="margin-left: 0"><?php echo TrustindexPlugin::___("Re-create plugin"); ?></a>
 <div class="clear"></div>
 </div>
 <div class="ti-box">
 <div class="ti-header"><?php echo TrustindexPlugin::___("Translation"); ?></div>
 <p>
 <?php echo TrustindexPlugin::___('If you notice an incorrect translation in the plugin text, please report it here:'); ?>
-<a href="mailto:support@trustindex.io">support@trustindex.io</a>
+ <a href="mailto:support@trustindex.io">support@trustindex.io</a>
 </p>
 </div>

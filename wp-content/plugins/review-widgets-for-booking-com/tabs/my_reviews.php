@@ -108,7 +108,7 @@ $download_timestamp = get_option($trustindex_pm_booking->get_option_name('downlo
 <?php if($download_timestamp < time()): ?>
 <div class="tablenav top" style="margin-bottom: 15px">
 <div class="alignleft actions">
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&refresh&my_reviews" class="btn-text btn-refresh btn-download-reviews" style="margin-left: 0" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>" data-delay=10><?php echo TrustindexPlugin::___("Download new reviews") ;?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&refresh&my_reviews" class="btn-text btn-refresh btn-download-reviews" style="margin-left: 0" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>" data-delay=10><?php echo TrustindexPlugin::___("Download new reviews") ;?></a>
 </div>
 </div>
 <?php endif; ?>
@@ -141,16 +141,16 @@ $download_timestamp = get_option($trustindex_pm_booking->get_option_name('downlo
 </thead>
 <tbody>
 <?php foreach ($reviews as $review): ?>
-<tr data-id="<?php echo $review->id; ?>">
+<tr data-id="<?php echo esc_attr($review->id); ?>">
 <td class="text-center">
-<img src="<?php echo $review->user_photo; ?>" class="ti-user-avatar" /><br />
-<?php echo $review->user; ?>
+<img src="<?php echo esc_url($review->user_photo); ?>" class="ti-user-avatar" /><br />
+<?php echo esc_html($review->user); ?>
 </td>
 <td class="text-center source-<?php echo ucfirst("booking") ?>"><?php echo trustindex_plugin_write_rating_stars($review->rating); ?></td>
-<td class="text-center"><?php echo $review->date; ?></td>
+<td class="text-center"><?php echo esc_html($review->date); ?></td>
 <td><div class="ti-review-content"><?php echo $trustindex_pm_booking->getReviewHtml($review); ?></div></td>
 <td>
-<a href="<?php echo $review->id; ?>" class="btn-text btn-highlight<?php if(isset($review->highlight) && $review->highlight): ?> has-highlight<?php endif; ?>" style="margin-left: 0"><?php echo TrustindexPlugin::___("Highlight text") ;?></a>
+<a href="<?php echo esc_attr($review->id); ?>" class="btn-text btn-highlight<?php if(isset($review->highlight) && $review->highlight): ?> has-highlight<?php endif; ?>" style="margin-left: 0"><?php echo TrustindexPlugin::___("Highlight text") ;?></a>
 </td>
 </tr>
 <?php endforeach; ?>

@@ -4,12 +4,12 @@ Plugin Name: Widgets for Booking.com Reviews
 Plugin Title: Widgets for Booking.com Reviews Plugin
 Plugin URI: https://wordpress.org/plugins/review-widgets-for-booking-com/
 Description: Embed Booking.com reviews fast and easily into your WordPress site. Increase SEO, trust and sales using Booking.com reviews.
-Tags: booking.com, reviews, widget, slider, booking reviews
+Tags: booking.com, reviews, widget, slider, booking reviews, ratings, recommendations, testimonials, hotels, accommodation, review, rating, recommendation, testimonial, customer review
 Author: Trustindex.io <support@trustindex.io>
 Author URI: https://www.trustindex.io/
 Contributors: trustindex
 License: GPLv2 or later
-Version: 6.6.2
+Version: 6.9
 Text Domain: review-widgets-for-booking-com
 Domain Path: /languages/
 Donate link: https://www.trustindex.io/prices/
@@ -25,7 +25,7 @@ $plugin_slug = $tmp[ count($tmp) - 2 ];
 if(1)
 {
 require_once plugin_dir_path( __FILE__ ) . 'plugin-load.php';
-$trustindex_pm_booking = new TrustindexPlugin("booking", __FILE__, "6.6.2", "Widgets for Booking.com Reviews", "Booking.com");
+$trustindex_pm_booking = new TrustindexPlugin("booking", __FILE__, "6.9", "Widgets for Booking.com Reviews", "Booking.com");
 }
 register_activation_hook(__FILE__, array($trustindex_pm_booking, 'activate'));
 register_deactivation_hook(__FILE__, array($trustindex_pm_booking, 'deactivate'));
@@ -73,7 +73,7 @@ add_action('init', array($trustindex_pm_booking, 'output_buffer'));
 add_action('wp_ajax_list_trustindex_widgets', array($trustindex_pm_booking, 'list_trustindex_widgets_ajax'));
 add_action('admin_enqueue_scripts', array($trustindex_pm_booking, 'trustindex_add_scripts'));
 add_action('rest_api_init', array($trustindex_pm_booking, 'init_restapi'));
-function trustindex_rate_us_booking() {
+add_action('admin_notices', function() {
 $rate_us = get_option('trustindex-booking-rate-us', time() - 1);
 if($rate_us == 'hide' || (int)$rate_us > time())
 {
@@ -109,7 +109,6 @@ return;
 </p>
 </div>
 <?php
-}
-add_action('admin_notices', 'trustindex_rate_us_booking');
+});
 add_action('plugins_loaded', array($trustindex_pm_booking, 'plugin_loaded'));
 ?>

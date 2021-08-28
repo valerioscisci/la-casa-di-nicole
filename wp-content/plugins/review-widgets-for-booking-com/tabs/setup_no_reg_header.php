@@ -334,9 +334,6 @@ break;
 case 'amazon':
 $example_url = 'https://www.amazon.com/sp?seller=A2VE8XCDXE9M4H';
 break;
-case 'bookatable':
-$example_url = 'https://www.bookatable.co.uk/roka-canary-wharf-london';
-break;
 case 'booking':
 $example_url = 'https://www.booking.com/hotel/us/four-seasons-san-francisco.html';
 break;

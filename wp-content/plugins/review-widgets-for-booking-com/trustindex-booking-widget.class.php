@@ -72,12 +72,12 @@ $selected_widget_id = isset($instance['ti-widget-ID']) ? esc_attr($instance['ti-
 <?php if ($ti_widgets): ?>
 <h2><?php echo TrustindexPlugin::___('Your saved widgets'); ?></h2>
 <?php foreach ($ti_widgets as $wc): ?>
-<p><strong><?php echo $wc['name']; ?>:</strong></p>
+<p><strong><?php echo esc_html($wc['name']); ?>:</strong></p>
 <p>
 <?php foreach ($wc['widgets'] as $w): ?>
-<a href="#" class="btn-copy-widget-id <?php if($selected_widget_id == $w['id']): ?>text-danger<?php endif; ?>" data-ti-id="<?php echo $w['id']; ?>">
+<a href="#" class="btn-copy-widget-id <?php if($selected_widget_id == $w['id']): ?>text-danger<?php endif; ?>" data-ti-id="<?php echo esc_attr($w['id']); ?>">
 <span class="dashicons <?php if($selected_widget_id == $w['id']): ?>dashicons-yes<?php else: ?>dashicons-admin-post<?php endif; ?>"></span>
-<?php echo $w['name']; ?>
+<?php echo esc_html($w['name']); ?>
 </a><br />
 <?php endforeach; ?>
 </p>

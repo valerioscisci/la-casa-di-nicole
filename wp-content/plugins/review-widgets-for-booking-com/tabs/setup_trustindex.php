@@ -21,11 +21,16 @@ wp_enqueue_script('trustindex-js', 'https://cdn.trustindex.io/loader.js', [], fa
 <li><?php echo TrustindexPlugin::___('Automatically update with NEW reviews'); ?></li>
 <li><?php echo TrustindexPlugin::___('Display UNLIMITED number of reviews'); ?></li>
 </ul>
-<a class="btn-text btn-lg arrow-btn" href="https://www.trustindex.io/ti-redirect.php?a=sys&c=wp-booking-3" target="_blank"><?php echo TrustindexPlugin::___('Create a Free Trustindex Account for More Features'); ?></a>
 </div>
 <div class="ti-col-6">
 <div src='https://cdn.trustindex.io/loader.js?76afafc10ad42261d7587d98bf'></div>
 </div>
+</div>
+<a class="btn-text btn-lg arrow-btn" href="https://www.trustindex.io/ti-redirect.php?a=sys&c=wp-booking-3" target="_blank"><?php echo TrustindexPlugin::___('Create a Free Trustindex Account for More Features'); ?></a>
+<div class="notice notice-success ti-special-offer">
+<img src="<?php echo $trustindex_pm_booking->get_plugin_file_url('static/img/special_30.jpg'); ?>">
+<p><?php echo TrustindexPlugin::___('Now we offer you a 30%% discount off your subscription! Create your free account and benefit from the onboarding discount now!'); ?></p>
+<div class="clear"></div>
 </div>
 </div>
 </div>

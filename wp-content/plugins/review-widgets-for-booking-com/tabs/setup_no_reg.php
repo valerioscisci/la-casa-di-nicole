@@ -1,26 +1,26 @@
 <?php include( plugin_dir_path(__FILE__ ) . "setup_no_reg_header.php" ); ?>
 <ul class="ti-free-steps">
-<li class="<?php echo !$trustindex_pm_booking->is_noreg_linked() ? "active" : "done"; ?><?php if($current_step == 1): ?> current<?php endif; ?>" href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=1">
+<li class="<?php echo !$trustindex_pm_booking->is_noreg_linked() ? "active" : "done"; ?><?php if($current_step == 1): ?> current<?php endif; ?>" href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=1">
 <span>1</span>
 <?php echo TrustindexPlugin::___('Connect %s platform', [ 'Booking.com' ]); ?>
 </li>
 <span class="ti-free-arrow"></span>
-<li class="<?php echo $style_id ? "done" : ($trustindex_pm_booking->is_noreg_linked() ? "active" : ""); ?><?php if($current_step == 2): ?> current<?php endif; ?>" href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=2">
+<li class="<?php echo $style_id ? "done" : ($trustindex_pm_booking->is_noreg_linked() ? "active" : ""); ?><?php if($current_step == 2): ?> current<?php endif; ?>" href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=2">
 <span>2</span>
 <?php echo TrustindexPlugin::___('Select Layout'); ?>
 </li>
 <span class="ti-free-arrow"></span>
-<li class="<?php echo $scss_set ? "done" : ($style_id ? "active" : ""); ?><?php if($current_step == 3): ?> current<?php endif; ?>" href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=3">
+<li class="<?php echo $scss_set ? "done" : ($style_id ? "active" : ""); ?><?php if($current_step == 3): ?> current<?php endif; ?>" href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=3">
 <span>3</span>
 <?php echo TrustindexPlugin::___('Select Style'); ?>
 </li>
 <span class="ti-free-arrow"></span>
-<li class="<?php echo $widget_setted_up ? "done" : ($scss_set ? "active" : ""); ?><?php if($current_step == 4): ?> current<?php endif; ?>" href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=4">
+<li class="<?php echo $widget_setted_up ? "done" : ($scss_set ? "active" : ""); ?><?php if($current_step == 4): ?> current<?php endif; ?>" href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=4">
 <span>4</span>
 <?php echo TrustindexPlugin::___('Set up widget'); ?>
 </li>
 <span class="ti-free-arrow"></span>
-<li class="<?php echo $widget_setted_up ? "active" : ""; ?><?php if($current_step == 5): ?> current<?php endif; ?>" href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=5">
+<li class="<?php echo $widget_setted_up ? "active" : ""; ?><?php if($current_step == 5): ?> current<?php endif; ?>" href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=5">
 <span>5</span>
 <?php echo TrustindexPlugin::___('Insert code'); ?>
 </li>
@@ -47,16 +47,16 @@ $reviews = $wpdb->get_results('SELECT * FROM '. $trustindex_pm_booking->get_nore
 <?php $page_details = get_option($trustindex_pm_booking->get_option_name('page-details')); ?>
 <div class="ti-source-box">
 <?php if(isset($page_details['avatar_url'])): ?>
-<img src="<?php echo $page_details['avatar_url']; ?>" />
+<img src="<?php echo esc_url($page_details['avatar_url']); ?>" />
 <?php endif; ?>
 <div class="ti-source-info">
-<strong><?php echo $page_details['name']; ?></strong><br />
+<strong><?php echo esc_html($page_details['name']); ?></strong><br />
 <?php if ($page_details['address']): ?>
-<?php echo $page_details['address']; ?><br />
+<?php echo esc_html($page_details['address']); ?><br />
 <?php endif; ?>
-<a href="<?php echo $trustindex_pm_booking->getPageUrl(); ?>" target="_blank"><?php echo $trustindex_pm_booking->getPageUrl(); ?></a>
+<a href="<?php echo esc_url($trustindex_pm_booking->getPageUrl()); ?>" target="_blank"><?php echo esc_url($trustindex_pm_booking->getPageUrl()); ?></a>
 </div>
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&command=delete-page"><button class="btn btn-text btn-disconnect"><?php echo TrustindexPlugin::___("Disconnect") ;?></button></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&command=delete-page"><button class="btn btn-text btn-disconnect"><?php echo TrustindexPlugin::___("Disconnect") ;?></button></a>
 <div class="clear"></div>
 </div>
 <?php else: ?>
@@ -99,7 +99,7 @@ value=""
 <?php elseif($current_step == 2 || !$style_id): ?>
 <h1 class="ti-free-title">
 2. <?php echo TrustindexPlugin::___('Select Layout'); ?>
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=1" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=1" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
 </h1>
 <?php if(!count($reviews)): ?>
 <div class="notice notice-warning" style="margin: 0 0 15px 0">
@@ -116,8 +116,8 @@ value=""
 </span>
 <?php foreach(TrustindexPlugin::$widget_templates['categories'] as $category => $ids): ?>
 <span class="ti-checkbox">
-<input type="radio" name="layout-select" value="<?php echo $category; ?>" data-ids="<?php echo $ids; ?>">
-<label><?php echo TrustindexPlugin::___(ucfirst($category)); ?></label>
+<input type="radio" name="layout-select" value="<?php echo esc_attr($category); ?>" data-ids="<?php echo esc_attr($ids); ?>">
+<label><?php echo esc_html(TrustindexPlugin::___(ucfirst($category))); ?></label>
 </span>
 <?php endforeach; ?>
 </div>
@@ -130,14 +130,14 @@ if(in_array($template['type'], [ 'badge', 'button', 'floating', 'popup', 'sideba
 $class_name = 'ti-half-width';
 }
 ?>
-<div class="<?php echo $class_name; ?>">
-<div class="ti-box ti-preview-boxes" data-layout-id="<?php echo $id; ?>" data-set-id="light-background">
+<div class="<?php echo esc_attr($class_name); ?>">
+<div class="ti-box ti-preview-boxes" data-layout-id="<?php echo esc_attr($id); ?>" data-set-id="light-background">
 <div class="ti-header">
 <span class="ti-header-layout-text">
 <?php echo TrustindexPlugin::___('Layout'); ?>:
-<strong><?php echo TrustindexPlugin::___($template['name']); ?></strong>
+<strong><?php echo esc_html(TrustindexPlugin::___($template['name'])); ?></strong>
 </span>
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&command=save-style&style_id=<?php echo urlencode($id); ?>" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___("Select") ;?></a>
+<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&command=save-style&style_id=<?php echo esc_attr(urlencode($id)); ?>" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___("Select") ;?></a>
 <div class="clear"></div>
 </div>
 <div class="preview">
@@ -151,7 +151,7 @@ $class_name = 'ti-half-width';
 <?php elseif($current_step == 3 || !$scss_set): ?>
 <h1 class="ti-free-title">
 3. <?php echo TrustindexPlugin::___('Select Style'); ?>
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=2" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=2" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
 </h1>
 <?php if(!count($reviews)): ?>
 <div class="notice notice-warning" style="margin: 0 0 15px 0">
@@ -169,14 +169,14 @@ $class_name = 'ti-half-width';
 ?>
 <div class="ti-preview-boxes-container">
 <?php foreach(TrustindexPlugin::$widget_styles as $id => $name): ?>
-<div class="<?php echo $class_name; ?>">
-<div class="ti-box ti-preview-boxes" data-layout-id="<?php echo $style_id; ?>" data-set-id="<?php echo $id; ?>">
+<div class="<?php echo esc_attr($class_name); ?>">
+<div class="ti-box ti-preview-boxes" data-layout-id="<?php echo esc_attr($style_id); ?>" data-set-id="<?php echo esc_attr($id); ?>">
 <div class="ti-header">
 <span class="ti-header-layout-text">
 <?php echo TrustindexPlugin::___('Style'); ?>:
 <strong><?php echo TrustindexPlugin::___($name); ?></strong>
 </span>
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&command=save-set&set_id=<?php echo urlencode($id); ?>" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___("Select") ;?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&command=save-set&set_id=<?php echo esc_attr(urlencode($id)); ?>" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___("Select") ;?></a>
 <div class="clear"></div>
 </div>
 <div class="preview">
@@ -190,7 +190,7 @@ $class_name = 'ti-half-width';
 <?php elseif($current_step == 4 || !$widget_setted_up): ?>
 <h1 class="ti-free-title">
 4. <?php echo TrustindexPlugin::___('Set up widget'); ?>
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=3" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=3" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
 </h1>
 <?php if(!count($reviews)): ?>
 <div class="notice notice-warning" style="margin: 0 0 15px 0">
@@ -199,18 +199,18 @@ $class_name = 'ti-half-width';
 </p>
 </div>
 <?php else: ?>
-<div class="ti-box ti-preview-boxes" data-layout-id="<?php echo $style_id; ?>" data-set-id="<?php echo $scss_set; ?>">
+<div class="ti-box ti-preview-boxes" data-layout-id="<?php echo esc_attr($style_id); ?>" data-set-id="<?php echo esc_attr($scss_set); ?>">
 <div class="ti-header">
 <?php echo TrustindexPlugin::___('Widget Preview'); ?>
 <?php if(!in_array($style_id, [ 17, 21 ])): ?>
 <span class="ti-header-layout-text ti-pull-right">
 <?php echo TrustindexPlugin::___('Style'); ?>:
-<strong><?php echo TrustindexPlugin::___(TrustindexPlugin::$widget_styles[$scss_set]); ?></strong>
+<strong><?php echo esc_html(TrustindexPlugin::___(TrustindexPlugin::$widget_styles[$scss_set])); ?></strong>
 </span>
 <?php endif; ?>
 <span class="ti-header-layout-text ti-pull-right">
 <?php echo TrustindexPlugin::___('Layout'); ?>:
-<strong><?php echo TrustindexPlugin::___(TrustindexPlugin::$widget_templates['templates'][$style_id]['name']); ?></strong>
+<strong><?php echo esc_html(TrustindexPlugin::___(TrustindexPlugin::$widget_templates['templates'][$style_id]['name'])); ?></strong>
 </span>
 </div>
 <div class="preview">
@@ -230,10 +230,11 @@ $class_name = 'ti-half-width';
 <ul>
 <li data-value="1,2,3,4,5" <?php echo count($filter['stars']) > 2 ? 'class="selected"' : ''; ?>><?php echo TrustindexPlugin::___('Show all'); ?></li>
 <li data-value="4,5" <?php echo count($filter['stars']) == 2 ? 'class="selected"' : ''; ?>>
-<?php echo $trustindex_pm_booking->get_rating_stars(4); ?> - <?php echo $trustindex_pm_booking->get_rating_stars(5); ?>
+
+&starf;&starf;&starf;&starf; - &starf;&starf;&starf;&starf;&starf;
 </li>
 <li data-value="5" <?php echo count($filter['stars']) == 1 ? 'class="selected"' : ''; ?>>
-<?php echo TrustindexPlugin::___('only'); ?> <?php echo $trustindex_pm_booking->get_rating_stars(5); ?>
+<?php echo TrustindexPlugin::___('only'); ?> &starf;&starf;&starf;&starf;&starf;
 </li>
 </ul>
 </div>
@@ -245,7 +246,7 @@ $class_name = 'ti-half-width';
 <?php wp_nonce_field( 'save-language_'.$trustindex_pm_booking->get_plugin_slug(), '_wpnonce_language' ); ?>
 <select class="form-control" name="lang" id="ti-lang-id">
 <?php foreach(TrustindexPlugin::$widget_languages as $id => $name): ?>
-<option value="<?php echo $id; ?>" <?php echo $lang == $id ? 'selected' : ''; ?>><?php echo $name; ?></option>
+<option value="<?php echo esc_attr($id); ?>" <?php echo $lang == $id ? 'selected' : ''; ?>><?php echo esc_html($name); ?></option>
 <?php endforeach; ?>
 </select>
 </form>
@@ -257,7 +258,7 @@ $class_name = 'ti-half-width';
 <?php wp_nonce_field( 'save-dateformat_'.$trustindex_pm_booking->get_plugin_slug(), '_wpnonce_dateformat' ); ?>
 <select class="form-control" name="dateformat" id="ti-dateformat-id">
 <?php foreach(TrustindexPlugin::$widget_dateformats as $format): ?>
-<option value="<?php echo $format; ?>" <?php echo $dateformat == $format ? 'selected' : ''; ?>><?php echo date($format); ?></option>
+<option value="<?php echo esc_attr($format); ?>" <?php echo $dateformat == $format ? 'selected' : ''; ?>><?php echo date($format); ?></option>
 <?php endforeach; ?>
 </select>
 </form>
@@ -330,7 +331,7 @@ $class_name = 'ti-half-width';
 </div>
 <div class="clear"></div>
 <div class="ti-footer">
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&setup_widget" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___("Save and get code") ;?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&setup_widget" class="btn-text btn-refresh ti-pull-right" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___("Save and get code") ;?></a>
 <div class="clear"></div>
 </div>
 </div>
@@ -338,7 +339,7 @@ $class_name = 'ti-half-width';
 <?php else: ?>
 <h1 class="ti-free-title">
 5. <?php echo TrustindexPlugin::___('Insert code'); ?>
-<a href="?page=<?php echo $_GET['page']; ?>&tab=setup_no_reg&step=4" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=setup_no_reg&step=4" class="ti-back-icon"><?php echo TrustindexPlugin::___('Back'); ?></a>
 </h1>
 <?php if(!count($reviews)): ?>
 <div class="notice notice-warning" style="margin: 0 0 15px 0">
@@ -360,10 +361,15 @@ $class_name = 'ti-half-width';
 <div class="ti-box">
 <div class="ti-header"><?php echo TrustindexPlugin::___('Increase SEO, trust and sales using customer reviews.'); ?></div>
 <a class="btn-text" href="https://www.trustindex.io/ti-redirect.php?a=sys&c=wp-booking-1" target="_blank"><?php echo TrustindexPlugin::___('Create a Free Account for More Features'); ?></a>
+<div class="notice notice-success ti-special-offer">
+<img src="<?php echo $trustindex_pm_booking->get_plugin_file_url('static/img/special_30.jpg'); ?>">
+<p><?php echo TrustindexPlugin::___('Now we offer you a 30%% discount off your subscription! Create your free account and benefit from the onboarding discount now!'); ?></p>
+<div class="clear"></div>
+</div>
 <ul class="ti-seo-list">
 <li>
 <strong><?php echo TrustindexPlugin::___("%d Review Platforms", [ $trustindex_pm_booking->get_platform_count() ]); ?></strong><br />
-<?php echo TrustindexPlugin::___("Add more reviews to your widget from %s, etc. to enjoy more trust, and to keep customers on your site.", [ 'Google, Facebook, Yelp, Amazon, Tripadvisor, Booking.com, Airbnb, Hotels.com, Bookatable, Capterra, Foursquare, Opentable' ]); ?><br />
+<?php echo TrustindexPlugin::___("Add more reviews to your widget from %s, etc. to enjoy more trust, and to keep customers on your site.", [ 'Google, Facebook, Yelp, Amazon, Tripadvisor, Booking.com, Airbnb, Hotels.com, Capterra, Foursquare, Opentable' ]); ?><br />
 <img src="<?php echo $trustindex_pm_booking->get_plugin_file_url('static/img/platforms.png'); ?>" alt="" style="margin-top: 5px" />
 </li>
 <li>

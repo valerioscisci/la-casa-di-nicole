@@ -1,5 +1,5 @@
 <?php
-/* GENERATED: 1626400074 */
+/* GENERATED: 1629853426 */
 class TrustindexPlugin
 {
 private $plugin_file_path;
@@ -14,6 +14,10 @@ $this->plugin_file_path = $plugin_file_path;
 $this->version = $version;
 $this->plugin_name = $plugin_name;
 $this->platform_name = $platform_name;
+}
+public function getShortName()
+{
+return $this->shortname;
 }
 
 
@@ -202,7 +206,7 @@ if (!in_array($opt_name, $this->get_option_names()))
 {
 echo "Option not registered in plugin (Trustindex class)";
 }
-if ($opt_name == "subscription-id")
+if(in_array($opt_name, [ 'subscription-id', 'proxy-check' ]))
 {
 return "trustindex-".$opt_name;
 }
@@ -218,6 +222,7 @@ return [
 'version',
 'page-details',
 'subscription-id',
+'proxy-check',
 'style-id',
 'review-content',
 'filter',
@@ -253,16 +258,16 @@ return array (
  8 => 'hotels',
  9 => 'opentable',
  10 => 'foursquare',
- 11 => 'bookatable',
- 12 => 'capterra',
- 13 => 'szallashu',
- 14 => 'thumbtack',
- 15 => 'expedia',
- 16 => 'zillow',
- 17 => 'wordpressPlugin',
- 18 => 'aliexpress',
- 19 => 'alibaba',
- 20 => 'sourceForge',
+ 11 => 'capterra',
+ 12 => 'szallashu',
+ 13 => 'thumbtack',
+ 14 => 'expedia',
+ 15 => 'zillow',
+ 16 => 'wordpressPlugin',
+ 17 => 'aliexpress',
+ 18 => 'alibaba',
+ 19 => 'sourceForge',
+ 20 => 'ebay',
 );
 }
 private $plugin_slugs = array (
@@ -277,7 +282,6 @@ private $plugin_slugs = array (
  'hotels' => 'review-widgets-for-hotels-com',
  'opentable' => 'review-widgets-for-opentable',
  'foursquare' => 'review-widgets-for-foursquare',
- 'bookatable' => 'review-widgets-for-bookatable',
  'capterra' => 'review-widgets-for-capterra',
  'szallashu' => 'review-widgets-for-szallas-hu',
  'thumbtack' => 'widgets-for-thumbtack-reviews',
@@ -287,6 +291,7 @@ private $plugin_slugs = array (
  'aliexpress' => 'widgets-for-aliexpress-reviews',
  'alibaba' => 'widgets-for-alibaba-reviews',
  'sourceForge' => 'widgets-for-sourceforge-reviews',
+ 'ebay' => 'widgets-for-ebay-reviews',
 );
 public function get_plugin_slugs()
 {
@@ -364,14 +369,14 @@ if(isset($this->plugin_slugs[ $force_platform ]))
 {
 $chosed_platform_slug = $this->plugin_slugs[ $force_platform ];
 $current_platform_slug = $this->plugin_slugs[ $this->shortname ];
-$file_path = str_replace("/$current_platform_slug/", "/$chosed_platform_slug/", $file_path);
+$file_path = preg_replace('/\/[^\/]+\/trustindex-plugin\.class\.php/', "/$chosed_platform_slug/trustindex-plugin.class.php", $file_path);
 }
-$chosed_platform = new TrustindexPlugin($force_platform, $file_path, "do-not-care-6.6.2", "do-not-care-Widgets for Booking.com Reviews", "do-not-care-Booking.com");
+$chosed_platform = new TrustindexPlugin($force_platform, $file_path, "do-not-care-6.9", "do-not-care-Widgets for Booking.com Reviews", "do-not-care-Booking.com");
 if(!$chosed_platform->is_noreg_linked() || !$chosed_platform->is_noreg_table_exists($force_platform))
 {
 return self::get_alertbox(
 "error",
-" @ <strong>Trustindex plugin</strong><br /><br />"
+" @ <strong>". TrustindexPlugin::___('Trustindex plugin') ."</strong><br /><br />"
 .TrustindexPlugin::___('You have to connect your business (%s)!', [$force_platform]),
 false
 );
@@ -385,7 +390,7 @@ else
 {
 return self::get_alertbox(
 "error",
-" @ <strong>Trustindex plugin</strong><br /><br />"
+" @ <strong>". TrustindexPlugin::___('Trustindex plugin') ."</strong><br /><br />"
 .TrustindexPlugin::___('Your shortcode is deficient: Trustindex Widget ID is empty! Example: ') . '<br /><code>['.$this->get_shortcode_name().' data-widget-id="478dcc2136263f2b3a3726ff"]</code>',
 false
 );
@@ -440,7 +445,11 @@ if($set_change)
 $params['set_id'] = $set_id;
 }
 $url = 'https://admin.trustindex.io/' . 'api/getLayoutScss?' . http_build_query($params);
-$server_output = wp_remote_retrieve_body( wp_remote_post( $url, $args ) );
+$server_output = $this->post_request($url, [
+'timeout' => '20',
+'redirection' => '5',
+'blocking' => true
+]);
 if($server_output[0] !== '[' && $server_output[0] !== '{')
 {
 $server_output = substr($server_output, strpos($server_output, '('));
@@ -704,7 +713,23 @@ public static $widget_languages = [
 'sk' => "Slovenčina",
 'es' => "Español",
 'sv' => "Svenska",
-'tr' => "Türkçe"
+'tr' => "Türkçe",
+'gd' => 'Gàidhlig na h-Alba',
+'hr' => 'Hrvatski',
+'id' => 'Bahasa Indonesia',
+'is' => 'Íslensku',
+'he' => 'עִברִית',
+'ja' => '日本',
+'ko' => '한국어',
+'lt' => 'Lietuvių',
+'ms' => 'Bahasa Melayu',
+'sl' => 'Slovenščina',
+'sr' => 'Српски',
+'th' => 'ไทย',
+'uk' => 'Українська',
+'vi' => 'Tiếng Việt',
+'mk' => 'Македонски',
+'bg' => 'български'
 ];
 public static $widget_dateformats = [ 'j. F, Y.', 'F j, Y.', 'Y.m.d.', 'Y-m-d', 'd/m/Y' ];
 private static $widget_rating_texts = array (
@@ -924,6 +949,102 @@ private static $widget_rating_texts = array (
  3 => '好',
  4 => '非常好',
  ),
+ 'gd' => 
+ array (
+ 0 => 'bochd',
+ 1 => 'nas ìsle na a ’chuibheasachd',
+ 2 => 'cuibheasach',
+ 3 => 'math',
+ 4 => 'sgoinneil',
+ ),
+ 'hr' => 
+ array (
+ 0 => 'siromašan',
+ 1 => 'ispod prosjeka',
+ 2 => 'prosjed',
+ 3 => 'dobro',
+ 4 => 'odličan',
+ ),
+ 'id' => 
+ array (
+ 0 => 'miskin',
+ 1 => 'dibawah rata-rata',
+ 2 => 'rata-rata',
+ 3 => 'bagus',
+ 4 => 'bagus sekali',
+ ),
+ 'is' => 
+ array (
+ 0 => 'fátækur',
+ 1 => 'fyrir neðan meðallag',
+ 2 => 'að meðaltali',
+ 3 => 'góður',
+ 4 => 'Æðislegt',
+ ),
+ 'ko' => 
+ array (
+ 0 => '가난한',
+ 1 => '평균 이하',
+ 2 => '평균',
+ 3 => '좋은',
+ 4 => '훌륭한',
+ ),
+ 'lt' => 
+ array (
+ 0 => 'vargšas',
+ 1 => 'žemiau vidurkio',
+ 2 => 'vidurkis',
+ 3 => 'gerai',
+ 4 => 'puikus',
+ ),
+ 'ms' => 
+ array (
+ 0 => 'miskin',
+ 1 => 'bawah purata',
+ 2 => 'purata',
+ 3 => 'baik',
+ 4 => 'cemerlang',
+ ),
+ 'sr' => 
+ array (
+ 0 => 'јадан',
+ 1 => 'испод просека',
+ 2 => 'просек',
+ 3 => 'Добро',
+ 4 => 'одличан',
+ ),
+ 'th' => 
+ array (
+ 0 => 'ยากจน',
+ 1 => 'ต่ำกว่าค่าเฉลี่ย',
+ 2 => 'เฉลี่ย',
+ 3 => 'ดี',
+ 4 => 'ยอดเยี่ยม',
+ ),
+ 'vi' => 
+ array (
+ 0 => 'nghèo nàn',
+ 1 => 'dưới mức trung bình',
+ 2 => 'Trung bình',
+ 3 => 'tốt',
+ 4 => 'thông minh',
+ ),
+ 'mk' => 
+ array (
+ 0 => 'Сиромашен',
+ 1 => 'под просек',
+ 2 => 'просек',
+ 3 => 'Добро',
+ 4 => 'одлично',
+ ),
+ 'bg' => 
+ array (
+ 0 => 'беден',
+ 1 => 'под средното',
+ 2 => 'средно аритметично',
+ 3 => 'добре',
+ 4 => 'отлично',
+ ),
 );
 private static $widget_recommendation_texts = array (
  'en' => 
@@ -979,7 +1100,7 @@ private static $widget_recommendation_texts = array (
  'he' => 
  array (
  'negative' => 'NOT_RECOMMEND_ICON לא ממליץ',
- 'positive' => 'ממליצה על RECOMMEND_ICON',
+ 'positive' => 'RECOMMEND_ICON ממליץ',
  ),
  'hi' => 
  array (
@@ -1061,6 +1182,66 @@ private static $widget_recommendation_texts = array (
  'negative' => 'NOT_RECOMMEND_ICON 不推荐',
  'positive' => 'RECOMMEND_ICON 推荐',
  ),
+ 'gd' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON no moladh',
+ 'positive' => 'RECOMMEND_ICON a ’moladh',
+ ),
+ 'hr' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON ne preporučuje',
+ 'positive' => 'RECOMMEND_ICON preporučuje',
+ ),
+ 'id' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON tidak merekomendasikan',
+ 'positive' => 'RECOMMEND_ICON merekomendasikan',
+ ),
+ 'is' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON mælir ekki með',
+ 'positive' => 'RECOMMEND_ICON mælir með',
+ ),
+ 'ko' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON 권장하지 않음',
+ 'positive' => 'RECOMMEND_ICON 추천',
+ ),
+ 'lt' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON nerekomenduoja',
+ 'positive' => 'RECOMMEND_ICON rekomenduoja',
+ ),
+ 'ms' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON tidak mengesyorkan',
+ 'positive' => 'RECOMMEND_ICON mengesyorkan',
+ ),
+ 'sr' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON не препоручује',
+ 'positive' => 'RECOMMEND_ICON препоручује',
+ ),
+ 'th' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON ไม่แนะนำ',
+ 'positive' => 'RECOMMEND_ICON แนะนำ',
+ ),
+ 'vi' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON không được đề xuất',
+ 'positive' => 'RECOMMEND_ICON đề xuất',
+ ),
+ 'mk' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON не препорачува',
+ 'positive' => 'RECOMMEND_ICON препорачува',
+ ),
+ 'bg' => 
+ array (
+ 'negative' => 'NOT_RECOMMEND_ICON не препоръчва',
+ 'positive' => 'RECOMMEND_ICON препоръчва',
+ ),
 );
 private static $widget_verified_texts = array (
  'en' => 'Verified',
@@ -1090,6 +1271,18 @@ private static $widget_verified_texts = array (
  'tr' => 'Doğrulanmış',
  'uk' => 'Перевірено',
  'zh' => '已验证',
+ 'gd' => 'Dearbhaichte',
+ 'hr' => 'Potvrđen',
+ 'id' => 'Diverifikasi',
+ 'is' => 'Staðfesting',
+ 'ko' => '검증 된',
+ 'lt' => 'Patvirtinta',
+ 'ms' => 'Disahkan',
+ 'sr' => 'Проверено',
+ 'th' => 'ตรวจสอบแล้ว',
+ 'vi' => 'Đã xác minh',
+ 'mk' => 'Потврдена',
+ 'bg' => 'Проверени',
 );
 private static $widget_month_names = array (
  'en' => 
@@ -1259,18 +1452,18 @@ private static $widget_month_names = array (
  ),
  'he' => 
  array (
- 0 => 'יָנוּאָר',
+ 0 => 'ינואר',
  1 => 'פברואר',
  2 => 'מרץ',
- 3 => 'אַפּרִיל',
+ 3 => 'אפריל',
  4 => 'מאי',
  5 => 'יוני',
  6 => 'יולי',
  7 => 'אוגוסט',
- 8 => 'סֶפּטֶמבֶּר',
- 9 => 'אוֹקְטוֹבֶּר',
- 10 => 'נוֹבֶמבֶּר',
- 11 => 'דֵצֶמבֶּר',
+ 8 => 'ספטמבר',
+ 9 => 'אוקטובר',
+ 10 => 'נובמבר',
+ 11 => 'דצמבר',
  ),
  'hi' => 
  array (
@@ -1497,6 +1690,186 @@ private static $widget_month_names = array (
  10 => 'листопад',
  11 => 'грудень',
  ),
+ 'gd' => 
+ array (
+ 0 => 'am Faoilleach',
+ 1 => 'an Gearran',
+ 2 => 'am Màrt',
+ 3 => 'an Giblean',
+ 4 => 'an Cèitean',
+ 5 => 'an t-Ògmhios',
+ 6 => 'an t-luchar',
+ 7 => 'an Lùnastal',
+ 8 => 'an t-Sultain',
+ 9 => 'an Dàmhair',
+ 10 => 'an t-Samhain',
+ 11 => 'an Dùbhlachd',
+ ),
+ 'hr' => 
+ array (
+ 0 => 'Siječanj',
+ 1 => 'Veljača',
+ 2 => 'Ožujak',
+ 3 => 'Travanj',
+ 4 => 'Svibanj',
+ 5 => 'Lipanj',
+ 6 => 'Srpanj',
+ 7 => 'Kolovoz',
+ 8 => 'Rujan',
+ 9 => 'Listopad',
+ 10 => 'Studeni',
+ 11 => 'Prosinac',
+ ),
+ 'id' => 
+ array (
+ 0 => 'Januari',
+ 1 => 'Februari',
+ 2 => 'Maret',
+ 3 => 'April',
+ 4 => 'Mei',
+ 5 => 'Juni',
+ 6 => 'Juli',
+ 7 => 'Agustus',
+ 8 => 'September',
+ 9 => 'Oktober',
+ 10 => 'November',
+ 11 => 'Desember',
+ ),
+ 'is' => 
+ array (
+ 0 => 'Janúar',
+ 1 => 'Febrúar',
+ 2 => 'Mars',
+ 3 => 'April',
+ 4 => 'Maí',
+ 5 => 'Júní',
+ 6 => 'Júlí',
+ 7 => 'Ágúst',
+ 8 => 'September',
+ 9 => 'Október',
+ 10 => 'Nóvember',
+ 11 => 'Desember',
+ ),
+ 'ko' => 
+ array (
+ 0 => '일월',
+ 1 => '이월',
+ 2 => '삼월',
+ 3 => '사월',
+ 4 => '오월',
+ 5 => '유월',
+ 6 => '칠월',
+ 7 => '팔월',
+ 8 => '구월',
+ 9 => '시월',
+ 10 => '십일월',
+ 11 => '십이월',
+ ),
+ 'lt' => 
+ array (
+ 0 => 'Sausis',
+ 1 => 'Vasaris',
+ 2 => 'Kovas',
+ 3 => 'Balandis',
+ 4 => 'Gegužė',
+ 5 => 'Birželis',
+ 6 => 'Liepa',
+ 7 => 'Rugpjūtis',
+ 8 => 'Rugsėjis',
+ 9 => 'Spalis',
+ 10 => 'Lapkritis',
+ 11 => 'Gruodis',
+ ),
+ 'ms' => 
+ array (
+ 0 => 'Januari',
+ 1 => 'Februari',
+ 2 => 'Mac',
+ 3 => 'April',
+ 4 => 'Mei',
+ 5 => 'Jun',
+ 6 => 'Julai',
+ 7 => 'Ogos',
+ 8 => 'September',
+ 9 => 'Oktober',
+ 10 => 'November',
+ 11 => 'Disember',
+ ),
+ 'sr' => 
+ array (
+ 0 => 'Јануар',
+ 1 => 'Фебруар',
+ 2 => 'Март',
+ 3 => 'Април',
+ 4 => 'мај',
+ 5 => 'Јуни',
+ 6 => 'Јул',
+ 7 => 'Август',
+ 8 => 'септембар',
+ 9 => 'Октобар',
+ 10 => 'Новембар',
+ 11 => 'Децембар',
+ ),
+ 'th' => 
+ array (
+ 0 => 'มกราคม',
+ 1 => 'กุมภาพันธ์',
+ 2 => 'มีนาคม',
+ 3 => 'เมษายน',
+ 4 => 'พฤษภาคม',
+ 5 => 'มิถุนายน',
+ 6 => 'กรกฎาคม',
+ 7 => 'สิงหาคม',
+ 8 => 'กันยายน',
+ 9 => 'ตุลาคม',
+ 10 => 'พฤศจิกายน',
+ 11 => 'ธันวาคม',
+ ),
+ 'vi' => 
+ array (
+ 0 => 'tháng một',
+ 1 => 'tháng hai',
+ 2 => 'tháng ba',
+ 3 => 'tháng tư',
+ 4 => 'tháng năm',
+ 5 => 'tháng sáu',
+ 6 => 'tháng bảy',
+ 7 => 'tháng tám',
+ 8 => 'tháng chín',
+ 9 => 'tháng mười',
+ 10 => 'tháng mười một',
+ 11 => 'tháng mười hai',
+ ),
+ 'mk' => 
+ array (
+ 0 => 'Jануари',
+ 1 => 'февруари',
+ 2 => 'март',
+ 3 => 'април',
+ 4 => 'мај',
+ 5 => 'јуни',
+ 6 => 'јули',
+ 7 => 'август',
+ 8 => 'септември',
+ 9 => 'октомври',
+ 10 => 'ноември',
+ 11 => 'декември',
+ ),
+ 'bg' => 
+ array (
+ 0 => 'Януари',
+ 1 => 'февруари',
+ 2 => 'Март',
+ 3 => 'Aприл',
+ 4 => 'май',
+ 5 => 'юни',
+ 6 => 'юли',
+ 7 => 'Август',
+ 8 => 'Септември',
+ 9 => 'Октомври',
+ 10 => 'Ноември',
+ 11 => 'Декември',
+ ),
 );
 private static $page_urls = array (
  'facebook' => 'https://www.facebook.com/pg/%page_id%',
@@ -1510,7 +1883,6 @@ private static $page_urls = array (
  'hotels' => 'https://hotels.com/%page_id%',
  'opentable' => 'https://www.opentable.com/%page_id%',
  'foursquare' => 'https://foursquare.com/v/%25page_id%25',
- 'bookatable' => 'https://www.bookatable.%page_id%/reviews',
  'capterra' => 'https://www.capterra.com/p/%page_id%/reviews',
  'szallashu' => 'https://szallas.hu/%page_id%?#rating',
  'thumbtack' => 'https://www.thumbtack.com/%page_id%',
@@ -1520,6 +1892,7 @@ private static $page_urls = array (
  'aliexpress' => 'https://www.aliexpress.com/store/%page_id%',
  'alibaba' => 'https://%page_id%.en.alibaba.com',
  'sourceForge' => 'https://sourceforge.net/software/product/%page_id%/',
+ 'ebay' => 'https://www.ebay.com/fdbk/feedback_profile/%page_id%',
 );
 public function getPageUrl()
 {
@@ -1601,6 +1974,9 @@ if($only_preview)
 $content = false;
 $style_id = $default_style_id;
 $set_id = $default_set_id;
+$show_logos = 1;
+$show_stars = 1;
+$show_reviewers_photo = 1;
 if($this->preview_content && $this->preview_content['id'] == $style_id)
 {
 $content = $this->preview_content['content'];
@@ -1678,7 +2054,8 @@ curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 $response = wp_remote_get("https://cdn.trustindex.io/widget-assets/template/$lang.json");
 if(is_wp_error($response))
 {
-die($this->___('Could not download the template for the widget.<br />Please reload the page.<br />If the problem persists, please write an email to support@trustindex.io.'));
+echo $this->get_alertbox('error', '<br />' .$this->___('Could not download the template for the widget.<br />Please reload the page.<br />If the problem persists, please write an email to support@trustindex.io.'));
+die;
 }
 $this->template_cache = json_decode($response['body'], true);
 }
@@ -1787,6 +2164,28 @@ $r_text . ' '
 '<span class="ti-recommendation-title">'. $r_text .'</span>',
 '<span class="ti-recommendation-title">'. $r_text .'</span>'
 ], $rating_content) .'</span>';
+$rating_content .= '<span class="ti-dummy-stars">';
+for($si = 1; $si <= 5; $si++)
+{
+$rating_content .= '<span class="ti-star '. ($si == 1 || $r->rating == 5 ? 'f' : 'e') .'"></span>';
+}
+$rating_content .= '</span>';
+}
+else if($this->shortname == 'ebay' && in_array($r->rating, [ 1, 3, 5 ]))
+{
+if($r->rating == 1)
+{
+$polarity = 'negative';
+}
+else if($r->rating == 3)
+{
+$polarity = 'neutral';
+}
+else
+{
+$polarity = 'positive';
+}
+$rating_content = '<span class="ti-polarity"><span class="ti-polarity-icon ' . $polarity . '"></span></span>';
 }
 else if($this->is_ten_scale_rating_platform())
 {
@@ -1803,7 +2202,7 @@ else
 $rating_content .= '<span class="ti-verified-review"><span class="ti-verified-tooltip">'. self::$widget_verified_texts[ $array['language'] ] .'</span></span>';
 }
 }
-$platform_name = ucfirst($this->shortname);
+$platform_name = ucfirst($this->getShortName());
 if($platform_name == 'Szallashu')
 {
 $tmp = explode('/', $array['page_details']['id']);
@@ -1845,7 +2244,8 @@ foreach($array['reviews'] as $review)
 {
 $rating_sum += (float)$review->rating;
 }
-$rating_score = $rating_sum / count($array['reviews']);
+$c = count($array['reviews']);
+$rating_score = $c ? $rating_sum / $c : 0;
 }
 $array['content'] = str_replace([
 '%platform%',
@@ -1859,21 +2259,21 @@ $array['content'] = str_replace([
 '<span class="ti-star e"></span><span class="ti-star e"></span><span class="ti-star e"></span><span class="ti-star e"></span><span class="ti-star e"></span>',
 'PLATFORM_SMALL_LOGO'
  ], [
-ucfirst($this->shortname),
+ucfirst($this->getShortName()),
 $array['page_details']['name'],
 $rating_count,
 $rating_score,
 $this->is_ten_scale_rating_platform() ? 10 : 5,
 $this->get_rating_text($rating_score, $array['language']),
 $array['page_details']['avatar_url'],
-$this->get_platform_name($this->shortname, $array['page_details']['id']),
+$this->get_platform_name($this->getShortName(), $array['page_details']['id']),
 $this->is_ten_scale_rating_platform() ? "<div class='ti-rating-box'>". $this->formatTenRating($rating_score) ."</div>" : $this->get_rating_stars($rating_score),
-'<div class="ti-small-logo"><img src="'. $this->get_plugin_file_url('static/img/platform/logo.svg') . '" alt="'. ucfirst($this->shortname) .'"></div>',
+'<div class="ti-small-logo"><img src="'. $this->get_plugin_file_url('static/img/platform/logo.svg') . '" alt="'. ucfirst($this->getShortName()) .'"></div>',
  ], $array['content']);
 if($this->isDarkLogo($array['style_id'], $array['set_id']))
 {
 $array['content'] = str_replace('img/platform/logo', 'img/platform/logo-dark', $array['content']);
-$array['content'] = str_replace('platform/'. ucfirst($this->shortname) .'/logo', 'platform/'. ucfirst($this->shortname) .'/logo-dark', $array['content']);
+$array['content'] = str_replace('platform/'. ucfirst($this->getShortName()) .'/logo', 'platform/'. ucfirst($this->getShortName()) .'/logo-dark', $array['content']);
 }
 if($this->is_ten_scale_rating_platform() && $array['style_id'] == 11)
 {
@@ -1890,11 +2290,11 @@ $replace_hu = true;
 }
 $tmp = explode($split, $array['page_details']['id']);
 $array['content'] = str_replace([ 'img/platform/logo.svg', 'img/platform/logo-dark.svg' ], [ 'img/platform/logo-'. $tmp[0] .'.svg', 'img/platform/logo-'. $tmp[0] .'-dark.svg' ], $array['content']);
-$array['content'] = str_replace([ 'platform/'. ucfirst($this->shortname) .'/logo.svg', 'platform/'. ucfirst($this->shortname) .'/logo-dark.svg' ], [ 'platform/'. ucfirst($this->shortname) .'/logo-'. $tmp[0] .'.svg', 'platform/'. ucfirst($this->shortname) .'/logo-'. $tmp[0] .'-dark.svg' ], $array['content']);
+$array['content'] = str_replace([ 'platform/'. ucfirst($this->getShortName()) .'/logo.svg', 'platform/'. ucfirst($this->getShortName()) .'/logo-dark.svg' ], [ 'platform/'. ucfirst($this->shortname) .'/logo-'. $tmp[0] .'.svg', 'platform/'. ucfirst($this->shortname) .'/logo-'. $tmp[0] .'-dark.svg' ], $array['content']);
 if($replace_hu)
 {
 $array['content'] = str_replace('img/platform/logo-hu', 'img/platform/logo', $array['content']);
-$array['content'] = str_replace('platform/'. ucfirst($this->shortname) .'/logo-hu', 'platform/'. ucfirst($this->shortname) .'/logo', $array['content']);
+$array['content'] = str_replace('platform/'. ucfirst($this->getShortName()) .'/logo-hu', 'platform/'. ucfirst($this->getShortName()) .'/logo', $array['content']);
 }
 }
 if(in_array($array['style_id'], [24, 25, 26, 27, 28, 29, 35]))
@@ -2030,7 +2430,7 @@ return $text;
 }
 public function download_noreg_reviews($page_details, $force_platform = null)
 {
-$force_platform = $force_platform ? $force_platform : $this->shortname;
+$force_platform = $force_platform ? $force_platform : $this->getShortName();
 $url = "https://admin.trustindex.io/" . "api/getPromoReviews?platform=".$force_platform."&page_id=" . $page_details['id'];
 if($force_platform == 'facebook')
 {
@@ -2040,15 +2440,12 @@ if(!isset($page_details['id']) && !trim($page_details['id']))
 {
 return [ 'success' => false ];
 }
-$args = array(
-'body' => [
-'wp_info' => $this->get_wp_details()
-],
+$server_output = $this->post_request($url, [
+'body' => [ 'wp_info' => $this->get_wp_details() ],
 'timeout' => '30',
 'redirection' => '5',
-'blocking' => true,
-);
-$server_output = wp_remote_retrieve_body( wp_remote_post( $url, $args ) );
+'blocking' => true
+]);
 if($server_output[0] !== '[' && $server_output[0] !== '{')
 {
 $server_output = substr($server_output, strpos($server_output, '('));
@@ -2063,18 +2460,17 @@ if(!isset($page_details['id']) || empty(trim($page_details['id'])))
 {
 return null;
 }
-$force_platform = $force_platform ? $force_platform : $this->shortname;
+$force_platform = $force_platform ? $force_platform : $this->getShortName();
 $url = "https://admin.trustindex.io/" . "api/getPageDetails?platform=".$force_platform."&page_id=" . $page_details['id'];
 if($force_platform == "facebook")
 {
 $url .= "&access_token=". $page_details['access_token'];
 }
-$args = array(
+$server_output = $this->post_request($url, [
 'timeout' => '20',
 'redirection' => '5',
-'blocking' => true,
-);
-$server_output = wp_remote_retrieve_body( wp_remote_post( $url, $args ) );
+'blocking' => true
+]);
 if($server_output[0] !== '[' && $server_output[0] !== '{')
 {
 $server_output = substr($server_output, strpos($server_output, '('));
@@ -2112,6 +2508,18 @@ return intval($response['body']);
 }
 
 
+private function post_request($url, $args)
+{
+$response = wp_remote_post($url, $args);
+if(is_wp_error($response))
+{
+echo $this->get_alertbox('error', '<br />Error with wp_remote_post, error message: <br /><b>'. $response->get_error_message() .'</b>');
+die;
+}
+return wp_remote_retrieve_body($response);
+}
+
+
 public function is_trustindex_connected()
 {
 return get_option($this->get_option_name("subscription-id"));
@@ -2144,13 +2552,12 @@ public function connect_trustindex_api($post_data, $mode = "new")
 {
 $url = "https://admin.trustindex.io/" . "api/connectApi";
 $post_data['wp_info'] = $this->get_wp_details();
-$args = array(
+$server_output = $this->post_request($url, [
 'body' => $post_data,
 'timeout' => '5',
 'redirection' => '5',
-'blocking' => true,
-);
-$server_output = wp_remote_retrieve_body( wp_remote_post( $url, $args ) );
+'blocking' => true
+]);
 if($server_output[0] !== '[' && $server_output[0] !== '{')
 {
 $server_output = substr($server_output, strpos($server_output, '('));
@@ -2204,12 +2611,12 @@ if ($this->is_trustindex_connected()): ?>
 <?php if ($ti_widgets): ?>
 <h2><?php echo TrustindexPlugin::___('Your saved widgets'); ?></h2>
 <?php foreach ($ti_widgets as $wc): ?>
-<p><strong><?php echo $wc['name']; ?>:</strong></p>
+<p><strong><?php echo esc_html($wc['name']); ?>:</strong></p>
 <p>
 <?php foreach ($wc['widgets'] as $w): ?>
-<a href="#" class="btn-copy-widget-id" data-ti-id="<?php echo $w['id']; ?>">
+<a href="#" class="btn-copy-widget-id" data-ti-id="<?php echo esc_attr($w['id']); ?>">
 <span class="dashicons dashicons-admin-post"></span>
-<?php echo $w['name']; ?>
+<?php echo esc_html($w['name']); ?>
 </a><br />
 <?php endforeach; ?>
 </p>
@@ -2249,11 +2656,15 @@ if($plugin_slug == $current_slug)
 {
 if(file_exists($this->get_plugin_dir() . 'static/css/admin-page-settings.css'))
 {
-wp_enqueue_style('trustindex_settings_style_'. $this->shortname, $this->get_plugin_file_url('static/css/admin-page-settings.css') );
+wp_enqueue_style('trustindex_settings_style_'. $this->shortname, $this->get_plugin_file_url('static/css/admin-page-settings.css'));
 }
 if(file_exists($this->get_plugin_dir() . 'static/js/admin-page-settings-common.js'))
 {
-wp_enqueue_script('trustindex_settings_script_common_'. $this->shortname, $this->get_plugin_file_url('static/js/admin-page-settings-common.js') );
+wp_enqueue_script('trustindex_settings_script_common_'. $this->shortname, $this->get_plugin_file_url('static/js/admin-page-settings-common.js'));
+}
+if(file_exists($this->get_plugin_dir() . 'static/js/admin-page-settings-connect.js'))
+{
+wp_enqueue_script('trustindex_settings_script_connect_'. $this->shortname, $this->get_plugin_file_url('static/js/admin-page-settings-connect.js'));
 }
 if(file_exists($this->get_plugin_dir() . 'static/js/admin-page-settings.js'))
 {

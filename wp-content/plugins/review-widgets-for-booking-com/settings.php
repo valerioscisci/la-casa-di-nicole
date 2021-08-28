@@ -24,6 +24,12 @@ break;
 echo "<script type='text/javascript'>self.close();</script>";
 die;
 }
+if(isset($_GET['test_proxy']))
+{
+delete_option($trustindex_pm_booking->get_option_name('proxy-check'));
+header('Location: admin.php?page=' . sanitize_text_field($_GET['page']) .'&tab=' . sanitize_text_field($_GET['tab']));
+exit;
+}
 $tabs = [];
 if($trustindex_pm_booking->is_trustindex_connected())
 {
@@ -82,8 +88,39 @@ if(!defined('WP_ACCESSIBLE_HOSTS') || strpos(WP_ACCESSIBLE_HOSTS, '*.trustindex.
 $http_blocked = true;
 }
 }
+$proxy = new WP_HTTP_Proxy();
+$proxy_check = true;
+if($proxy->is_enabled())
+{
+$opt_name = $trustindex_pm_booking->get_option_name('proxy-check');
+$db_data = get_option($opt_name, "");
+if(!$db_data)
+{
+$response = wp_remote_post("https://admin.trustindex.io/" . "api/userCheckLoggedIn", [
+'timeout' => '30',
+'redirection' => '5',
+'blocking' => true
+]);
+if(is_wp_error($response))
+{
+$proxy_check = $response->get_error_message();
+update_option($opt_name, $response->get_error_message(), false);
+}
+else
+{
+update_option($opt_name, 1, false);
+}
+}
+else
+{
+if($db_data !== '1')
+{
+$proxy_check = $db_data;
+}
+}
+}
 ?>
-<div id="trustindex-plugin-settings-page">
+<div id="trustindex-plugin-settings-page" class="ti-toggle-opacity">
 <h1 class="ti-free-title">
 <?php echo TrustindexPlugin::___("Widgets for Booking.com Reviews"); ?>
 <a href="https://www.trustindex.io/ti-redirect.php?a=sys&c=wp-booking-l" target="_blank" title="Trustindex" class="ti-pull-right">
@@ -102,6 +139,16 @@ $http_blocked = true;
 </p>
 </div>
 <?php endif; ?>
+<?php if($proxy_check !== TRUE): ?>
+<div class="ti-box ti-notice-error">
+<p>
+<?php echo TrustindexPlugin::___("It seems you are using a proxy for HTTP requests but after a test request it returned a following error:"); ?><br />
+<strong><?php echo $proxy_check; ?></strong><br /><br />
+<?php echo TrustindexPlugin::___("Therefore, our plugin might not work properly. Please, contact your hosting support, they can resolve this easily."); ?>
+</p>
+<a href="?page=<?php echo esc_attr($_GET['page']); ?>&tab=<?php echo esc_attr($_GET['tab']); ?>&test_proxy" class="btn-text btn-refresh" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___("Test again") ;?></a>
+</div>
+<?php endif; ?>
 <div class="nav-tab-wrapper">
 <?php foreach($tabs as $tab_name => $tab): ?>
 <?php
@@ -118,9 +165,9 @@ $subtabs = $tab;
 }
 ?>
 <a
-id="link-tab-<?php echo $action; ?>"
+id="link-tab-<?php echo esc_attr($action); ?>"
 class="nav-tab<?php if($is_active): ?> nav-tab-active<?php endif; ?><?php if($tab == 'troubleshooting'): ?> nav-tab-right<?php endif; ?>"
-href="<?php echo admin_url('admin.php?page='.$trustindex_pm_booking->get_plugin_slug().'/settings.php&tab='.$action); ?>"
+href="<?php echo admin_url('admin.php?page='.$trustindex_pm_booking->get_plugin_slug().'/settings.php&tab='. esc_attr($action)); ?>"
 ><?php echo esc_html($tab_name); ?></a>
 <?php endforeach; ?>
 </div>
@@ -128,14 +175,14 @@ href="<?php echo admin_url('admin.php?page='.$trustindex_pm_booking->get_plugin_
 <div class="nav-tab-wrapper sub-nav">
 <?php foreach($subtabs as $tab_name => $tab): ?>
 <a
-id="link-tab-<?php echo $tab; ?>"
+id="link-tab-<?php echo esc_attr($tab); ?>"
 class="nav-tab<?php if($selected_tab == $tab): ?> nav-tab-active<?php endif; ?>"
-href="<?php echo admin_url('admin.php?page='.$trustindex_pm_booking->get_plugin_slug().'/settings.php&tab='.$tab); ?>"
-><?php echo $tab_name; ?></a>
+href="<?php echo admin_url('admin.php?page='.$trustindex_pm_booking->get_plugin_slug().'/settings.php&tab='. esc_attr($tab)); ?>"
+><?php echo esc_html($tab_name); ?></a>
 <?php endforeach; ?>
 </div>
 <?php endif; ?>
-<div id="tab-<?php echo $selected_tab; ?>">
+<div id="tab-<?php echo esc_attr($selected_tab); ?>">
 <?php include( plugin_dir_path(__FILE__ ) . "tabs/".$selected_tab.".php" ); ?>
 </div>
 </div>

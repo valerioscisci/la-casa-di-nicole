@@ -1,13 +1,13 @@
 <?php
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
-if (!class_exists('TrustindexPlugin' ) )
+defined('ABSPATH') or die('No script kiddies please!');
+if(!class_exists('TrustindexPlugin'))
 {
 $plugin_dirs = scandir(WP_PLUGIN_DIR);
 $ti_plugins = [];
 foreach($plugin_dirs as $dir)
 {
 $class_file = WP_PLUGIN_DIR . '/' . $dir . '/trustindex-plugin.class.php';
-if($dir == '.' || $dir == '..' || !is_dir(WP_PLUGIN_DIR . '/' . $dir) || !file_exists($class_file))
+if($dir == '.' || $dir == '..' || !is_dir(WP_PLUGIN_DIR . '/' . $dir) || !file_exists($class_file) || $dir == 'customer-reviews-for-woocommerce')
 {
 continue;
 }

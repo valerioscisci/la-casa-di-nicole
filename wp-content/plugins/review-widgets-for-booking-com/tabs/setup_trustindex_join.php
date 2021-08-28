@@ -70,7 +70,7 @@ $widget_number = $trustindex_pm_booking->get_trustindex_widget_number();
 <?php if ($trustindex_subscription_id): ?>
 <?php
 $ti_widgets = $trustindex_pm_booking->get_trustindex_widgets();
-$ti_package = $ti_widgets[0]['package'] ?? null;
+$ti_package = is_array($ti_widgets) && $ti_widgets && isset($ti_widgets[0]['package']) ? $ti_widgets[0]['package'] : null;
 ?>
 <p>
 <?php echo TrustindexPlugin::___("Your %s is connected.", [ TrustindexPlugin::___('Trustindex account') ]); ?><br />
@@ -90,11 +90,11 @@ $ti_package = $ti_widgets[0]['package'] ?? null;
 <button class="btn btn-disconnect" type="submit"><?php echo TrustindexPlugin::___("Disconnect"); ?></button>
 </form>
 <?php else: ?>
-<form id="form-connect" class="box-content" method="post" action="">
+<div class="ti-row">
+<form id="form-connect" class="box-content ti-col-6" method="post" action="">
 <input type="hidden" name="command" value="connect" />
 <?php wp_nonce_field( 'connect-reg_'.$trustindex_pm_booking->get_plugin_slug() ); ?>
 <div class="form-group">
-<div class="col-sm-12">
 <label for="ti-reg-email2"><?php echo TrustindexPlugin::___('E-mail'); ?></label>
 <input type="email"
 placeholder="<?php echo TrustindexPlugin::___('E-mail'); ?>"
@@ -105,9 +105,7 @@ id="ti-reg-email2"
 value="<?php echo esc_attr($current_user->user_email); ?>"
 />
 </div>
-</div>
 <div class="form-group">
-<div class="col-sm-12">
 <label for="ti-reg-password2"><?php echo TrustindexPlugin::___('Password'); ?></label>
 <input type="password"
 placeholder="<?php echo TrustindexPlugin::___('Password'); ?>"
@@ -117,7 +115,6 @@ required="required"
 id="ti-reg-password2"
 />
 </div>
-</div>
 <button type="submit" class="btn btn-primary" data-loading-text="<?php echo TrustindexPlugin::___("Loading") ;?>"><?php echo TrustindexPlugin::___('CONNECT ACCOUNT');?></button>
 <br />
 <p class="text-center">
@@ -125,6 +122,8 @@ id="ti-reg-password2"
 <a class="btn-text" href="https://www.trustindex.io/ti-redirect.php?a=sys&c=wp-booking-4" target="_blank"><?php echo TrustindexPlugin::___('Create a new Trustindex account');?></a>
 </p>
 </form>
+<div class="ti-col-6"></div>
+</div>
 <?php endif; ?>
 </div>
 <?php if($trustindex_subscription_id): ?>
@@ -143,7 +142,7 @@ id="ti-reg-password2"
 <?php echo TrustindexPlugin::___('You have got %d widgets saved in Trustindex admin.', array($widget_number)); ?>
 </p>
 <?php foreach ($ti_widgets as $wc_i => $wc): ?>
-<p><strong><?php echo $wc['name']; ?>:</strong></p>
+<p><strong><?php echo esc_html($wc['name']); ?>:</strong></p>
 <?php if ($wc['widgets']): ?>
 <ul>
 <?php foreach ($wc['widgets'] as $wi_num => $w): ?>
